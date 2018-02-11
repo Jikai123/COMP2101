@@ -1,0 +1,16 @@
+#!/bin/bash
+# Create a script to demonstrate both types of array data indexing
+
+# Create an array named colours and give it 3 colour names as values (red green blue)
+colours=(red green blue)
+
+# Create hash named animals, give it animal names as values (cardinal frog lobster)
+declare -A animals
+animals=([red]=cardinal [green]=frog [blue]=lobster)
+
+
+read -p "Give me a number from 1 to ${#colours[@]}: " number
+colour=${colours[$((number-1))]}
+animal=${animals[$colour]}
+
+echo "You picked $number, which is the $colour $animal."

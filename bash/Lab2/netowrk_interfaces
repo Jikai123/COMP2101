@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo
+# Display configured interfaces
+interfaces=(ens33 lo)
+echo "The amount of configured interfaces: ${#interfaces[@]}"
+echo
+echo -n "Hostname: ens33; IPV4 address: "
+ifconfig ens33|grep -w inet|sed -e 's/.*addr://' -e 's/ .*//'|grep [[:print:]]
+
+echo -n "Hostname: ens33; IPV6 address: "
+ifconfig ens33|grep -w inet6|sed -e 's/.*addr://' -e 's/Scope.*//'|grep [[:print:]]
+echo
+# Display default gateway
+echo -n "The default gateway: "
+ip route | grep 'default via'|sed -e 's/.*via //' -e 's/dev.*$//'
+
+#Display Internal IP address and its name
+echo -n "Internal IP address: "
+ifconfig ens33|grep -w inet|sed -e 's/.*addr//' -e 's/Bcast.*$//'
