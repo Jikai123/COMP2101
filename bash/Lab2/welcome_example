@@ -1,0 +1,13 @@
+#This script produce the dynamic output form this slide
+#it should look like
+# Welcome to planet hostname, title name!
+# Todya is weekday
+
+hostname=$(hostname)
+title="Supreme Commander"
+export MYNAME="Jikai"
+today=$(date +%A)
+
+
+echo "Welcome to planet $hostname, $title $MYNAME!"
+echo "Today is $today."
