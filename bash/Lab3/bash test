@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# test if /etc/resolv.conf file exists
+file=/etc/resolv.conf ; [ -e "$file" ] && echo "$file exists"
+
+# Is /bin/ls exectable
+[ -x /bin/ls ] && echo "/bin/ls is executable"
+
+#Is /tmp a directory
+[ -d /tmp ] && echo "/tmp is a directory"
+
+#Is /etc/hosts a directory
+[ -d /etc/hosts ] && echo "/etc/hosts is a directory"
+
+#Can you read /etc/shadow as an ordinary user
+[ -r /etc/shadow ] && echo "/etc/shadow is readable"
+
+#Can you write /etc/network/interfaces as an ordinary user
+[ -w /etc/netowrk/interfaces ] && echo "/etc/network/interfaces is writable"
+
+#Is /bin/passwd setuid
+[ -u /bin/passwd ] && echo "/bin/passwd is setuid"
+
+#Which is newer, /etc/hosts or /etc/resolv.conf
+[ /etc/hosts -nt  /etc/resolv.conf ] && echo "/etc/hosts is newer than resolv.conf"
+[ /etc/hosts -nt  /etc/resolv.conf ] || echo "/etc/hosts is older than resolv.conf"
+
+#Is /bin/pidof a symbolic link or a regular file
+file=/bin/pidof; [ -L $file ] && echo "$file is a symbolic link"
+file=/bin/pidof; [ -f $file ] && echo "$file is a regular file"

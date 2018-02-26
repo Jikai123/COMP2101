@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+#    System name with domain name if it has one
+#    IP addresses for this host by interface, leave out localhost loopback network
+
+#    OS version and name
+#    CPU description
+#    Memory installed
+#    Available disk space on attached physical drives
+#    List of printers configured

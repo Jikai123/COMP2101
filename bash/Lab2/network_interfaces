@@ -6,10 +6,10 @@ interfaces=(ens33 lo)
 echo "The amount of configured interfaces: ${#interfaces[@]}"
 echo
 echo -n "Hostname: ens33; IPV4 address: "
-ifconfig ens33|grep -w inet|sed -e 's/.*addr://' -e 's/ .*//'|grep [[:print:]]
+ifconfig ens33|grep -w inet|sed -e 's/.*addr://' -e 's/ .*//'
 
 echo -n "Hostname: ens33; IPV6 address: "
-ifconfig ens33|grep -w inet6|sed -e 's/.*addr://' -e 's/Scope.*//'|grep [[:print:]]
+ifconfig ens33|grep -w inet6|sed -e 's/.*addr://' -e 's/Scope.*//'
 echo
 # Display default gateway
 echo -n "The default gateway: "

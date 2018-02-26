@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# test if SHELL variable exists
+if [ -v SHELL ]; then
+  echo "SHELL exists";
+else
+  echo "SHELL does not exists";
+fi
+
+# Does the vaiable FLOOBLE exist
+if [ -v FLOOBLE ]; then
+  echo "FLOOBLE exists";
+else
+  echo "FLOOBLE does not exists";
+fi
+echo
+
+# Is there anything assigned to $FLOOBLE
+FLOOBLE=(1 01 02)
+a=${FLOOBLE[0]}
+b=${FLOOBLE[1]}
+c=${FLOOBLE[2]}
+
+if [ -v FLOOBLE ]; then
+  echo "FLOOBLE exists";
+else
+  echo "FLOOBLE does not exist";
+fi
+
+[[ a -eq b ]] && echo $a=$b
+
+# If $arr has more or less than one element
+arr=(a b c d)
+if 
