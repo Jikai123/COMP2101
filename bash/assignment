@@ -3,6 +3,8 @@
 
 #    System name with domain name if it has one
 #    IP addresses for this host by interface, leave out localhost loopback network
+echo -n "Hostname: ens33; IPV4 address: "
+ifconfig ens33|grep -w inet|sed -e 's/.*addr://' -e 's/ .*//'
 
 #    OS version and name
 #    CPU description

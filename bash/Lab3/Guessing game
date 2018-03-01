@@ -6,8 +6,8 @@
 
 scretnum=$(($RANDOM % 10 + 1))
 read -p "I created a number between 1 to 10, you need to guess it by entering a number: " guess
-if [ -n $guess ]; then
-  echo $guess| grep -q '[^1-10]' && guess=0
+if [[ -n $guess ]]; then
+  echo $guess| grep -q [1-9]0*$ && guess=0
   if [ $guess -lt 1 -o $guess -gt 10 ]; then
      echo "Your guess should be from 1 to 10 inclusive"
   else

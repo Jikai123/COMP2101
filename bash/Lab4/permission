@@ -1,0 +1,24 @@
+#!/bin/bash
+# identify files with setuid or setgid permissions in a
+#    directory specified on the command line
+
+
+dirname="$1"
+if [ -z "$dirname" ]; then
+  echo "You didn't give me a directory name on the command line" >&2
+  exit 1
+fi
+[ -d "$dirname" ] || (echo "$dirname is not a directory" >&2 ; exit 2)
+if [ ! -r "$dirname" ]; then
+  echo "You don't have read permission for $dirname" >&2
+  exit 3
+fi
+if [ -x "$dirname" ]; then
+  echo "Setuid or setgid files:"
+  find "$dirname" -type f -executable -perm -4000 -ls 2>/dev/null | sort -k 3
+  find "$dirname" -type f -executable -perm -2000 -ls 2>/dev/null | sort -k 4
+  exit 0
+else
+  echo "You don't have access permission for $dirname" >&2
+  exit 3
+fi

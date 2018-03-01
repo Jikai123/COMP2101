@@ -31,4 +31,3 @@ fi
 
 # If $arr has more or less than one element
 arr=(a b c d)
-if 
