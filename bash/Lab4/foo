@@ -1,7 +1,0 @@
-#!/bin/bash
-
-myvar="line 1 line 2 line 3"
-for S in $myvar; do
-    echo "$S"
-
-done
