@@ -2,4 +2,4 @@
 
 userpicked=$(dialog --menu "choose one" 0 0 0 a 1 b 2 c 3 d 4 e 5 --output-fd 1)
 (for ((i=0;i<=100;i+=10)) do echo $i;sleep 1;done)|dialog --gauge "progress" 7 60;clear
-foo=$(dialog --rangebox "Pick a value" 8 80 1 9 5 --output-fd 1);clear;echo "You chose $foo"
+foo=$(dialog --rangebox "Pick a value" 8 80 1 9 5 --output -fd 1);clear;echo "You chose $foo"

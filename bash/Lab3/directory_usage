@@ -1,0 +1,27 @@
+#!/bin/bash
+# Create a script to display the disk usage for a directory specified by the user on the command line.
+
+
+
+if [ $1 == "-h" ]; then
+   echo "Usage: $0 [directory path] [-h]"
+   exit 0
+elif [ -z $1 ]; then
+      echo "Usage: $0 [directory path] [-h]"
+      exit 1
+elif [ ! -d $1 ]; then
+   echo "$1 doesn't exsit, check if you type correctly"
+   exit 1
+   if [ -r $1 -a -x $1 ]; then
+   echo "$1 is not readable or executable"
+   exit 1
+   fi
+else
+files=`find $1 -type f |wc -l`
+space=`du -sh $1`
+   echo "There are $files files in the directory tree with a total space of $space"
+   echo $1
+   echo "10 files using the most disk space: "
+   find $1 -type f |du -h |sort -h|tail
+   exit 0
+fi
