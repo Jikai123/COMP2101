@@ -1,0 +1,11 @@
+#!/bin/bash
+
+function cleanup {
+    rm /tmp/mytemporaryfiles
+    logger -t `basename "$0"` -i -p user.info -s “Cleaning up and aborting”
+    exit 1
+}
+
+trap cleanup SIGHUP
+trap cleanup SIGTERM
+trap cleanup SIGINT

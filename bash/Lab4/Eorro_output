@@ -1,0 +1,9 @@
+#!/bin/bash
+
+grapsnag >&
+ /tmp/errormessage.txt
+if [ $? != 0
+]; then
+logger -t $(basename "$0") -i -p user.warning -f /tmp/errormessage.txt && rm /tmp/error
+message.txt
+fi

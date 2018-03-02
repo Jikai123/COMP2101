@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 debug=0
 declare -a stuffToProcess
 [ $# -gt 1 ] && echo "$# args left to process"
@@ -9,16 +10,16 @@ function usagehelp {
 }
 
 
-while [ $# -gt 0 ]; do
-case "$1" in
--h | --help )
-echo "Usage: $0 [-d level] [-h]"
-exit 0
-;;
-* )
-stuffToProcess+=("$1")
-;;
-esac
-shift
+   while [ $# -gt 0 ]; do
+         case "$1" in
+         -h | --help )
+              echo `usagehelp`
+              exit 0
+              ;;
+         * )
+              stuffToProcess+=("$1")
+              ;;
+              esac
+              shift
 done
 [ ${#stuffToProcess[@]} ] && echo "Will do work on ${stuffToProcess[@]} (${#stuffToProcess[@]} items)"
