@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#for S in aaa bbb ccc; do
+#    echo "Hello $S"
+#done
+
+for (( count=0; count -lt 10; count ++ ))
+   echo $count
+done
