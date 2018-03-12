@@ -1,0 +1,26 @@
+#!/bin/bash
+#    List of printers configured
+###lpstat -p
+
+# change to home directory
+cd
+# assign the listen port of
+webinterface=`grep WebInterface /etc/cups/cupsd.conf`
+listen=`grep "Listen localhost" /etc/cups/cupsd.conf`
+
+# show the printers listen
+echo "Cups listen for connection from: $listen"
+# show the web interface setting
+echo -n "Web interface setting: "
+echo "$webinterface"
+
+printerstatus=`lpstat -v`
+# list printes in the system
+if [[ $printerstatus =~ "*No destinations*" ]]; then
+   echo "No printers in your computer"
+   exit 1
+else
+   echo
+   echo "Your printers list:"
+   echo `lpstat -v |echo`
+fi

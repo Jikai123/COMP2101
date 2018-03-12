@@ -1,0 +1,18 @@
+#!/bin/bash
+#    CPU description
+###command: less /proc/cpuinfo
+###command: lscpu
+
+
+arch=`lscpu| grep 'Architecture: '|awk '{print $2}'`
+cores=`lscpu| grep '^CPU(s): '|awk '{print $2}'`
+model=`lscpu| grep 'Model '|sed -e 's/.*name:            //'`
+mhz=`lscpu| grep 'MHz: '|awk '{print $3}'`
+cache=`lscpu| grep 'cache'| awk '{print $1,$2,$3}'`
+
+
+echo "Architecture: $arch"
+echo "Cores: $cores"
+echo "Model name: $model"
+echo "CPU MHz: $mhz"
+echo "$cache"

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Assign domain name to the variable "domains"
+domains=(`domainname|awk '{print $1}'`) # create an array for domainnames
+domainnum=${#domains[@]} # count the numbers of the domains
+
+# show the system name
+echo "System name is: `uname`"
+
+# check if there is any domain in the system
+case $domains in
+    '(none)') # to check there is no domain in the system
+         echo "There is no domain in this system"
+         exit 0 # exit the script
+         ;;
+    *)
+         echo "There is $domainnum domains in this system, they are:" 
+         echo "${domains[@]}" # list the domain names in the interface
+         ;;
+    esac

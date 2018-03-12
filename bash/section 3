@@ -1,0 +1,12 @@
+#!/bin/bash
+#    OS version and name
+
+
+hostname=`hostnamectl | grep 'hostname: '|sed -e 's/.*: //'`
+version=`hostnamectl | grep 'System: ' |sed -e 's/.*: //'`
+kernel=`hostnamectl | grep 'Kernel: ' |sed -e 's/.*: //'`
+
+
+echo "OS version is: $version"
+echo "Kernel is: $kernel"
+echo "Hostname is $hostname"

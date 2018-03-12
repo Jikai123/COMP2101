@@ -1,0 +1,5 @@
+#!/bin/bash
+#    Available disk space on attached physical drives
+
+echo "memroy installed:"
+echo `df -h | grep /dev/sda|awk 'BEGIN {print "Filesystem\tSize\tUsed\tAvail\tUsed%";} {print $1,"\t",$3,"\t",$4,"\t",$5;}' `

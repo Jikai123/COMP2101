@@ -1,0 +1,32 @@
+#!/bin/bash
+
+function usagehelp {
+   echo "Usage: $0 [-h]"
+   echo "Usage: $0 [domains] [ipinterface] [operating_system] [cpu] [memory] [diskspace] [printers]"
+}
+
+
+while [ $# -gt 0 ]; do
+       case "$1" in
+      -h | --help )
+              usagehelp
+              exit 0
+              ;;
+      domains )
+
+
+              ;;
+      ipinterface )
+
+              ;;
+      operating_system )
+              ;;
+      cpu )
+              ;;
+      memory )
+
+      diskspace )
+      printers )
+       esac
+       shift
+done
