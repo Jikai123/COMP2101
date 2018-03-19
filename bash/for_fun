@@ -1,9 +1,20 @@
 #!/bin/bash
 
-#for S in aaa bbb ccc; do
-#    echo "Hello $S"
-#done
+# Assign domain name to the variable "domains"
+domains=(`ls -l|awk '{print $9}'`)
+domainnum=${#domains[@]}
 
-for (( count=0; count -lt 10; count ++ ))
-   echo $count
-done
+# show the system name
+echo "System name is: `uname`"
+
+# check if there is any domain in the system
+case $domains in
+    '(none)')
+         echo "There is no domain in this system"
+         exit 0
+         ;;
+    *)
+         echo "There is $domainnum in this system, they are:"
+         echo "${domains[@]}"
+         ;;
+    esac

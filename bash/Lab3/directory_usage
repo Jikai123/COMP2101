@@ -3,7 +3,7 @@
 
 
 
-if [ $1 == "-h" ]; then
+if [ $1 = "-h" ]; then
    echo "Usage: $0 [directory path] [-h]"
    exit 0
 elif [ -z $1 ]; then

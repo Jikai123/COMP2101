@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function cleanup {
+    echo 123
     rm /tmp/mytemporaryfiles
     logger -t `basename "$0"` -i -p user.info -s “Cleaning up and aborting”
     exit 1
@@ -9,3 +10,5 @@ function cleanup {
 trap cleanup SIGHUP
 trap cleanup SIGTERM
 trap cleanup SIGINT
+
+cleanup

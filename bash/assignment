@@ -1,25 +1,151 @@
 #!/bin/bash
+# This script can complete a various of task. You can use this script with different arguments to check the system name with its domain,
+# show the IP interfaces, operating system and its names, CPU description, memory installed, available disk space, and list of priter configurations
 
+#####################
+# VARIABLES
+#####################
+# Assign domain name to the variable "domains"
+domains=(`domainname|awk '{print $1}'`) # create an array for domain names
+domainnum=${#domains[@]} # count the numbers of the domains
 
-#    System name with domain name if it has one
+# an array of interface names configured on this machine
+interfaces=(`ifconfig |grep '^[^l ]'|awk '{print $1}'`) # an array of interface names configured on this machine
+numinterfaces=${#interfaces[@]}
+intfindex=0 # will be used to iterate over the interfaces array
 
+# Assign the operating system version and kernel to the following variables
+osname=`uname`
+version=`hostnamectl | grep 'System: ' |sed -e 's/.*: //'`   # Assign system version to version variable
+kernel=`hostnamectl | grep 'Kernel: ' |sed -e 's/.*: //'`    # Assign system kernel to kernel variable
 
-#    IP addresses for this host by interface, leave out localhost loopback network
-echo -n "Hostname: ens33; IPV4 address: "
-ifconfig ens33|grep -w inet|sed -e 's/.*addr://' -e 's/ .*//'
+# Assign CPU information to different variables
+arch=`lscpu| grep 'Architecture: '|awk '{print $2}'` # Assign CPU Architecture info to arch variable
+cores=`lscpu| grep '^CPU(s): '|awk '{print $2}'`     # Assgin CPU cores numbers to cores variable
+model=`lscpu| grep 'Model '|sed -e 's/.*name:            //'`   # Assign CPU model to model variable
+mhz=`lscpu| grep 'MHz: '|awk '{print $3}'`       # Assign CPU MHz to mhz variable
+cache=`lscpu| grep 'cache'| awk '{print $1,$2,$3}'`      # Assign CPU cache to cache variable
 
-#    OS version and name
-###hostnamectl
+# printers configuration
+webinterface=`grep WebInterface /etc/cups/cupsd.conf`   # Assign web interface setting to webinterface variable
+listen=`grep "Listen localhost" /etc/cups/cupsd.conf`   # Assign Cups listen to listen variable
 
-#    CPU description
-###command: less /proc/cpuinfo
-###command: lscpu
+#####################
+#Fucntion
+#####################
+# create a function which can check syntax
+function usagehelp {
+   echo "Usage: $0 [-h | --help] [domains] [ipinterface] [operating_system] [cpu] [memory] [diskspace] [printers]"
+}
 
-#    Memory installed
-### free -m
+#create a function for error type
+function errormessage() {
+   echo "I don't know what $1 is."
+   echo "Usage: $0 [-h | --help] [domains] [ipinterface] [operating_system] [cpu] [memory] [diskspace] [printers]"
+}
 
-#    Available disk space on attached physical drives
-### df
+#####################
+# OUTPUT
+#####################
 
-#    List of printers configured
-###lpstat -p
+if [ $# = 0 ]; then  # if a user doesn't provide an argument, it will give a prompt
+    echo "You need to give me an argument"
+    usagehelp
+fi
+
+while [ $# -gt 0 ]; do   # check it there any arguments in the command
+       case "$1" in      # use "case" statement for multiple tasks
+      -h | --help )      # if the $1 argument match "-h or --help", do the following commands or function
+              usagehelp
+              exit 0     # exit the script with number 0 which means command executes successfully
+              ;;
+      domains )          # if the $1 argument match "domains", do the following command
+          # show the system name
+          echo
+          echo "          system information"
+          echo "System name is: `hostname`"
+          # check if there is any domain in the system
+          case $domains in
+              '(none)') # if $domains variable match (none), it will do the echo command
+                   echo "There is no domain in this system"
+                   ;;
+              *)        # for other situation, it will do the folling commands
+                   echo "There is $domainnum domains in this system, they are:"
+                   echo "${domains[@]}" # list the domain names in the interface
+                   ;;
+              esac
+              ;;
+      ipinterface )
+                   declare -A ips # will be a hash with ip addresses, keyed using interface name
+                   echo
+                   echo "           Interfaces information"
+                   echo "We have $numinterfaces interfaces"
+                   # iterate over the interfaces array
+                   while [ $intfindex -lt $numinterfaces ]; do
+                   # get the interface name from the interfaces array
+                       intfname="${interfaces[$intfindex]}"
+                   # extract the assigned ip address(es) using ifconfig and store that in the ips hash
+                       ips[$intfname]="`ifconfig $intfname|grep 'inet '|sed -e 's/.*addr://' -e 's/ .*//'`"
+                   # display the interface and if it has any, its ip address(es)
+                       if [ -n "${ips[$intfname]}" ]; then
+                            echo "Interface $intfname has the address ${ips[$intfname]}"
+                       else
+                            echo "Interface $intfname has no ip address"
+                     fi
+                   # increment the index and move on to the next interfaces array value
+                     intfindex+=1
+                   done
+              ;;
+      operating_system )  # if the $1 argument match "operating_system", it will show the operatig system message
+                   echo
+                   echo "            operating system information"
+                   echo "OS version is: $version"
+                   echo "Kernel is: $kernel"
+                   echo "Operating system name is: $osname"
+              ;;
+      cpu )          # if the $1 argument match "cpu", it will show the cpu message
+                   echo
+                   echo "          CPU information"
+                   echo "Architecture: $arch"
+                   echo "Cores: $cores"
+                   echo "Model name: $model"
+                   echo "CPU MHz: $mhz"
+                   echo "$cache"
+              ;;
+      memory )    # if the $1 argument match "memory", it will show the memory usage
+                   echo
+                   echo "             Memory information"
+                   echo "Memory installed: "
+                   echo `free -m | grep ^'[M]' | awk 'BEGIN {print "Total";} {print $2;}'` MB    # show the total memory in the machine
+                   echo `free -m | grep ^'[M]' | awk 'BEGIN {print "Used";} {print $3;}'` MB     # show the used Memory
+                   echo `free -m | grep ^'[M]' | awk 'BEGIN {print "Free";} {print $4;}'` MB     # show the free memory
+              ;;
+      diskspace )      # if the $1 argument match "diskspace", it will show the diskspace usage
+                   echo
+                   echo "             diskspace information "
+                   echo `df -h | grep /dev/sda1|awk 'BEGIN {print "Filesystem:";} {print $1;}' `    # show the name of filesystem in this mechine
+                   echo `df -h | grep /dev/sda1|awk 'BEGIN {print "Size:";} {print $2;}' `          # show the total space of disk
+                   echo `df -h | grep /dev/sda1|awk 'BEGIN {print "Used:";} {print $3;}' `          # show the used space of filesystem
+                   echo `df -h | grep /dev/sda1|awk 'BEGIN {print "Available:";} {print $4;}' `     # show the available space of filesystem
+                   echo `df -h | grep /dev/sda1|awk 'BEGIN {print "Used%:";} {print $5;}' `         # show the usd percentage of filesystem
+              ;;
+      printers )      # if the $1 argument match "printers", it will show the printers configuration
+                   cd      # change to home directory
+                   echo
+                   echo "             Printers information"
+                   echo "Cups listen for connection from: $listen"     # show the printers listen
+                   echo -n "Web interface setting: "
+                   echo "$webinterface"                        # show the web interface setting
+                   echo "Print devices: "
+                   lpstat -v          # show the list of print devices
+              ;;
+      * )
+                         # if the user type a wrong argument, it will show an error message
+                         echo
+                         errormessage $1
+                         exit 1
+              ;;
+       esac
+       shift   # each time through the loop, shift the arguments left
+
+done
